@@ -1,0 +1,120 @@
+/* Layout: one narrow column like the sketch – logo, line of text, links, booking, bird, then the bone-pile ground from the cover as the floor */
+:root {
+  --night: #181214;       /* darkest wash at the top of the cover */
+  --umber: #3b2a2d;       /* main brown of the painting */
+  --blood: #5c2427;       /* dried red in the lower half */
+  --bone: #e9e5ec;        /* white of the bird */
+  --ash: #a79ea6;         /* muted mauve-grey */
+  --line: rgba(233,229,236,.16);
+  --display: "IM Fell English SC", "Iowan Old Style", Georgia, serif;
+  --body: "Special Elite", "Courier New", Courier, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { background: var(--night); }
+img { max-width: 100%; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  color: var(--bone);
+  font-family: var(--body);
+  font-size: 17px;
+  /* the watercolour wash from the album cover, darkened slightly so the text stays readable */
+  background:
+    linear-gradient(180deg, rgba(24,18,20,.45) 0%, rgba(24,18,20,.15) 45%, rgba(24,18,20,0) 100%),
+    url("../img/wash.webp") center top / cover no-repeat,
+    var(--umber);
+  overflow-x: hidden;
+}
+/* paper grain over everything */
+body::after {
+  content: ""; position: fixed; inset: 0; pointer-events: none; opacity: .16; mix-blend-mode: overlay; z-index: 5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+/* dark blotches and vignette, like the wash on the cover */
+body::before {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(140% 100% at 50% 40%, transparent 55%, rgba(0,0,0,.55) 100%);
+}
+main {
+  flex: 1;
+  width: 100%;
+  max-width: 440px;
+  margin: 0 auto;
+  padding-block: clamp(28px, 6vh, 56px) 0;
+  padding-left: max(20px, env(safe-area-inset-left, 0px));
+  padding-right: max(20px, env(safe-area-inset-right, 0px));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  position: relative;
+  z-index: 1;
+}
+.logo { width: min(78%, 320px); }
+.logo img { display: block; width: 100%; height: auto; filter: drop-shadow(0 6px 18px rgba(0,0,0,.55)); }
+h1 {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(1.35rem, 5.2vw, 1.6rem);
+  letter-spacing: .06em;
+  text-align: center;
+  text-wrap: balance;
+}
+h1 span { color: var(--ash); }
+h1 { filter: url(#rough-text); }
+nav { width: 100%; display: grid; gap: 26px; }
+.group { display: grid; gap: 12px; }
+.label {
+  font-size: .8rem; letter-spacing: .18em; text-transform: uppercase; color: var(--ash);
+  text-align: center;
+}
+a.link {
+  position: relative; isolation: isolate;
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 18px;
+  color: var(--bone); text-decoration: none;
+  font-size: 1.05rem; letter-spacing: .14em; text-transform: uppercase;
+}
+/* torn, stamped box behind each link */
+a.link::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  border: 2px solid rgba(233,229,236,.55);
+  background: rgba(16,11,12,.62);
+  filter: url(#rough);
+  transition: background .15s, border-color .15s;
+}
+a.link:nth-child(even)::before { transform: rotate(.6deg); }
+a.link:nth-child(odd)::before { transform: rotate(-.5deg); }
+a.link svg { width: 22px; height: 22px; flex: none; fill: currentColor; filter: url(#rough-text); }
+a.link .go { margin-left: auto; opacity: .5; transition: opacity .15s; }
+a.link:hover::before, a.link:focus-visible::before {
+  background: var(--blood); border-color: var(--bone);
+}
+a.link:hover .go, a.link:focus-visible .go { opacity: 1; }
+a.link:focus-visible { outline: none; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--bone); outline-offset: 2px; }
+.booking {
+  display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline; gap: 6px 10px;
+  font-size: .95rem; color: var(--ash); text-align: center;
+}
+.booking a { color: var(--bone); text-decoration: none; border-bottom: 1px solid var(--line); user-select: all; }
+.booking a:hover { border-color: var(--bone); }
+.booking button {
+  font: inherit; font-size: .72rem; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--ash); background: none; border: 1px solid var(--line); padding: 3px 8px; cursor: pointer;
+}
+.booking button:hover { color: var(--bone); border-color: var(--bone); }
+.bird {
+  width: min(92%, 380px);
+  margin-top: 6px;
+  margin-bottom: -14%;   /* lets the bird hang over the bone pile like on the cover */
+  position: relative; z-index: 2;
+}
+.bird img { display: block; width: 100%; height: auto; filter: drop-shadow(0 10px 30px rgba(0,0,0,.5)); }
+footer.ground { width: 100%; line-height: 0; position: relative; z-index: 1; }
+footer.ground img { display: block; width: 100%; min-width: 640px; max-width: none; height: auto; position: relative; left: 50%; transform: translateX(-50%); }

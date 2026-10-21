@@ -1,4 +1,7 @@
 (function () {
+  // iOS Safari only applies :active styles when a touch listener exists
+  document.addEventListener('touchstart', function () {}, { passive: true });
+
   var btn = document.getElementById('copy');
   btn.addEventListener('click', function () {
     var addr = 'banddtn@gmail.com';

@@ -145,10 +145,13 @@ a.link {
   text-transform: uppercase;
   /* steps() makes motion jump between frames instead of easing — stop-motion feel */
   transition: transform .15s steps(3);
+  /* the custom :active state replaces the grey tap flash on mobile */
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* transform scales visually without touching layout, so neighbours stay put */
 a.link:hover,
+a.link:active,
 a.link:focus-visible {
   z-index: 1;
   transform: scale(1.02);
@@ -184,6 +187,7 @@ a.link:nth-child(odd)::before {
 }
 
 a.link:hover::before,
+a.link:active::before,
 a.link:focus-visible::before {
   animation: boil .5s steps(1, end) infinite;
 }
@@ -198,6 +202,7 @@ a.link svg {
 }
 
 a.link:hover svg,
+a.link:active svg,
 a.link:focus-visible svg {
   transform: rotate(360deg);
 }
@@ -209,6 +214,7 @@ a.link:focus-visible svg {
   }
 
   a.link:hover::before,
+  a.link:active::before,
   a.link:focus-visible::before {
     animation: none;
   }
@@ -221,12 +227,14 @@ a.link .go {
 }
 
 a.link:hover::before,
+a.link:active::before,
 a.link:focus-visible::before {
   background: var(--blood);
   border-color: var(--bone);
 }
 
 a.link:hover .go,
+a.link:active .go,
 a.link:focus-visible .go {
   opacity: 1;
 }
@@ -259,7 +267,8 @@ button:focus-visible {
   user-select: all;
 }
 
-.booking a:hover {
+.booking a:hover,
+.booking a:active {
   border-color: var(--bone);
 }
 
@@ -275,7 +284,8 @@ button:focus-visible {
   cursor: pointer;
 }
 
-.booking button:hover {
+.booking button:hover,
+.booking button:active {
   color: var(--bone);
   border-color: var(--bone);
 }

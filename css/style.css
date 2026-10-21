@@ -143,7 +143,8 @@ a.link {
   font-size: 1.05rem;
   letter-spacing: .14em;
   text-transform: uppercase;
-  transition: transform .15s;
+  /* steps() makes motion jump between frames instead of easing — stop-motion feel */
+  transition: transform .15s steps(3);
 }
 
 /* transform scales visually without touching layout, so neighbours stay put */
@@ -162,15 +163,29 @@ a.link::before {
   border: 2px solid rgba(233, 229, 236, .55);
   background: rgba(16, 11, 12, .62);
   filter: url(#rough);
+  transform: rotate(var(--tilt));
   transition: background .15s, border-color .15s;
 }
 
 a.link:nth-child(even)::before {
-  transform: rotate(.6deg);
+  --tilt: .6deg;
 }
 
 a.link:nth-child(odd)::before {
-  transform: rotate(-.5deg);
+  --tilt: -.5deg;
+}
+
+/* the box "boils" while hovered: a few hand-placed frames held at ~8fps */
+@keyframes boil {
+  0%   { transform: rotate(var(--tilt)) translate(0, 0); }
+  25%  { transform: rotate(calc(var(--tilt) - .8deg)) translate(1px, -1px); }
+  50%  { transform: rotate(calc(var(--tilt) + .5deg)) translate(-1px, 1px); }
+  75%  { transform: rotate(calc(var(--tilt) - .3deg)) translate(1px, 1px); }
+}
+
+a.link:hover::before,
+a.link:focus-visible::before {
+  animation: boil .5s steps(1, end) infinite;
 }
 
 a.link svg {
@@ -179,12 +194,24 @@ a.link svg {
   flex: none;
   fill: currentColor;
   filter: url(#rough-text);
-  transition: transform .5s;
+  transition: transform .5s steps(6);
 }
 
 a.link:hover svg,
 a.link:focus-visible svg {
   transform: rotate(360deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  a.link,
+  a.link svg {
+    transition: none;
+  }
+
+  a.link:hover::before,
+  a.link:focus-visible::before {
+    animation: none;
+  }
 }
 
 a.link .go {

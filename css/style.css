@@ -301,6 +301,8 @@ footer.ground {
   line-height: 0;
   position: relative;
   z-index: 1;
+  /* the image is wider than a phone screen; clip it here so the page can't scroll sideways */
+  overflow: hidden;
 }
 
 footer.ground img {
